@@ -12,7 +12,7 @@ class PrefManager private constructor(context: Context){
         private const val KEY_IS_LOGGED_IN = "isLoggedIn"
         private const val KEY_USERNAME = "username"
         private const val KEY_PASSWORD = "password"
-
+        private const val KEY_LAST_LOGIN = "lastLoginTime"
         private var instance: PrefManager? = null
 
         fun getInstance(context: Context): PrefManager {
@@ -45,10 +45,20 @@ class PrefManager private constructor(context: Context){
         editor.apply()
     }
 
+    fun setUsername(username: String) {
+        saveUsername(username)
+    }
+
     fun savePassword(password: String) {
         val editor = sharedPreferences.edit()
         editor.putString(KEY_PASSWORD, password)
         editor.apply()
+    }
+
+
+    // wrapper agar kode lama tetap kompatibe
+    fun setPassword(password: String) {
+        savePassword(password)
     }
 
     fun getUsername(): String{
@@ -57,6 +67,16 @@ class PrefManager private constructor(context: Context){
 
     fun getPassword(): String {
         return sharedPreferences.getString(KEY_PASSWORD, "") ?: ""
+    }
+
+    fun saveLastLoginTime(time: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString(KEY_LAST_LOGIN, time)
+        editor.apply()
+    }
+
+    fun getLastLoginTime(): String {
+        return sharedPreferences.getString(KEY_LAST_LOGIN, "Belum pernah login") ?: "Belum pernah login"
     }
 
     fun clear() {

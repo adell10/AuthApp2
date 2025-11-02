@@ -1,14 +1,15 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.example.authapp"
+    namespace = "com.example.mycontact"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.authapp"
+        applicationId = "com.example.mycontact"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -33,7 +34,6 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-
     buildFeatures {
         viewBinding = true
     }
@@ -49,4 +49,12 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Room
+    implementation(libs.room.runtime) // wajib
+    implementation(libs.room.ktx) // direkomendasikan utk Kotlin (suspend/Flow)
+    ksp(libs.room.compiler) // wajib: codegen DAO via KSP
+
+    // Coroutines
+    implementation(libs.coroutines.android)
 }

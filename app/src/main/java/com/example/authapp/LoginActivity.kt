@@ -3,31 +3,31 @@ package com.example.authapp
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.authapp.databinding.ActivityLoginBinding
+import com.example.authapp.data.AppDatabase
+import com.example.mycontact.databinding.ActivityLoginBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var prefManager: PrefManager
+    private lateinit var db: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //assign binding
         binding = ActivityLoginBinding.inflate(layoutInflater)
-        //set content view
         setContentView(binding.root)
 
         prefManager = PrefManager.getInstance(this)
+        db = AppDatabase.get(this)
 
-        //handle UI
         with(binding) {
             btnLogin.setOnClickListener {
-                val username = edtUsername.text.toString()
-                val password = edtPassword.text.toString()
+                val username = edtUsername.text.toString().trim()
+                val password = edtPassword.text.toString().trim()
 
                 if (username.isEmpty() || password.isEmpty()) {
                     Toast.makeText(
@@ -35,52 +35,39 @@ class LoginActivity : AppCompatActivity() {
                         "Semua field harus diisi",
                         Toast.LENGTH_SHORT
                     ).show()
-                }else {
-                    if (isValidCredential()) {
-                        prefManager.setLoggedIn(true)
-                        checkLoginStatus()
-                    } else {
-                        //text = Username atau password salah
-                        Toast.makeText(
-                            this@LoginActivity,
-                            "Username atau password salah",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                } else {
+                    // 🔹 cek user dari database Room
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val user = db.userDao().getUser(username, password)
+                        runOnUiThread {
+                            if (user != null) {
+                                prefManager.setLoggedIn(true)
+                                prefManager.setUsername(username)
+                                Toast.makeText(
+                                    this@LoginActivity,
+                                    "Login berhasil",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+
+                                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                                finish()
+                            } else {
+                                Toast.makeText(
+                                    this@LoginActivity,
+                                    "Username atau password salah",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
                     }
                 }
             }
 
             txtRegister.setOnClickListener {
-                var intent = Intent(
-                    this@LoginActivity,
-                    RegisterActivity::class.java
-                )
+                val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
                 startActivity(intent)
+                finish()
             }
-
-
-        }
-    }
-
-    private fun isValidCredential(): Boolean{
-        val username = prefManager.getUsername()
-        val password = prefManager.getPassword()
-        val inputUsername = binding.edtUsername.text.toString()
-        val inputPassword = binding.edtPassword.text.toString()
-
-        return username == inputUsername && password == inputPassword
-    }
-
-    private fun checkLoginStatus() {
-        val isLoggedIn = prefManager.isLoggedIn()
-        if (isLoggedIn) {
-            Toast.makeText(this@LoginActivity, "Login berhasil", Toast.LENGTH_SHORT
-            ).show()
-            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-            finish()
-        }else {
-            Toast.makeText(this@LoginActivity, "Login gagal", Toast.LENGTH_SHORT
-            ).show()
         }
     }
 }

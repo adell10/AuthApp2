@@ -17,7 +17,7 @@
         />
 
     <EditText
-        android:id="@+id/edt_username"
+        android:id="@+id/edtUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Username...."
@@ -25,7 +25,7 @@
         />
 
     <EditText
-        android:id="@+id/edt_password"
+        android:id="@+id/edtPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Pasword...."
@@ -34,7 +34,7 @@
         />
 
     <Button
-        android:id="@+id/btn_login"
+        android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Login"
@@ -42,7 +42,7 @@
         />
 
     <TextView
-        android:id="@+id/txt_register"
+        android:id="@+id/txtRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Belum terdaftar? Daftar di sini"

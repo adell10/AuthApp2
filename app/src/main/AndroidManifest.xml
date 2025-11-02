@@ -12,13 +12,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AuthApp">
         <activity
-            android:name=".RegisterActivity"
+            android:name=".ContactAdapter"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name="com.example.authapp.ProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.authapp.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.authapp.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.authapp.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
