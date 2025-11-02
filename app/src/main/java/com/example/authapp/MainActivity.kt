@@ -181,9 +181,9 @@ class MainActivity : AppCompatActivity() {
         prefManager = PrefManager.getInstance(this)
         checkLoginStatus()
 
+
         val loggedInUsername = prefManager.getUsername()
-        val lastLoginTime = prefManager.getLastLoginTime()
-        binding.txtUsername.text = "Login sebagai: $loggedInUsername\nTerakhir login: $lastLoginTime"
+        binding.txtUsername.text = "Login sebagai: $loggedInUsername"
 
         // Inisialisasi database
         db = AppDatabase.get(this)

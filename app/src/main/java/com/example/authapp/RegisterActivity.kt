@@ -128,22 +128,17 @@ class RegisterActivity : AppCompatActivity() {
                     // Simpan user ke database
                     CoroutineScope(Dispatchers.IO).launch {
                         val user = User(username = username, password = password)
-                        db.userDao().insert(user)
+                        db.userDao().insert(user)  // sudah benar
 
                         runOnUiThread {
-                            prefManager.saveUsername(username)
-                            prefManager.savePassword(password)
-                            prefManager.setLoggedIn(true)
-                            Toast.makeText(
-                                this@RegisterActivity,
-                                "Registrasi berhasil!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-
+                            prefManager.saveUsername(username) // cukup simpan username aktif
+                            prefManager.setLoggedIn(true)      // status login
+                            Toast.makeText(this@RegisterActivity, "Registrasi berhasil!", Toast.LENGTH_SHORT).show()
                             startActivity(Intent(this@RegisterActivity, MainActivity::class.java))
                             finish()
                         }
                     }
+
                 }
             }
 
@@ -153,5 +148,3 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 }
-
-
